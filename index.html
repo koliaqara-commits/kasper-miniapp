@@ -1,287 +1,194 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4fa">
   <title>Kasper Mini App</title>
-
-  <link
-    rel="stylesheet"
-    href="./style.css"
-  />
-
+  <link rel="stylesheet" href="./style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
-
-<main class="app-shell">
-
-<section class="view active" id="dealsView">
-
-<header class="screen-header">
-
-<div>
-<p class="eyebrow">Kasper</p>
-<h1>Мои сделки</h1>
-</div>
-
-<button
-class="icon-button"
-id="refreshDeals"
-type="button"
->
-↻
-</button>
-
-</header>
-
-<button
-class="primary-action"
-id="openCreate"
-type="button"
->
-<span>+</span>
-Создать сделку
-</button>
-
-<div class="segmented">
-
-<button
-class="segment active"
-data-filter="active"
->
-Активные
-</button>
-
-<button
-class="segment"
-data-filter="history"
->
-История
-</button>
-
-</div>
-
-<div class="deal-list" id="dealList"></div>
-
-</section>
-
-<section class="view" id="walletView">
-
-<header class="screen-header">
-<div>
-<p class="eyebrow">Kasper</p>
-<h1>Баланс</h1>
-</div>
-</header>
-
-<div
-class="balance-grid"
-id="balanceGrid"
-></div>
-
-<h2>История транзакций</h2>
-
-<div
-class="transaction-list"
-id="transactionList"
-></div>
-
-</section>
-
-<section class="view" id="createView">
-
-<header class="screen-header">
-
-<div>
-<p class="eyebrow">Kasper</p>
-<h1>Создать сделку</h1>
-</div>
-
-</header>
-
-<form
-class="deal-form"
-id="dealForm"
->
-
-<label>
-Тип сделки
-
-<select name="type">
-
-<option value="NFT">
-NFT подарок
-</option>
-
-<option value="Stars">
-Stars
-</option>
-
-<option value="TON">
-TON
-</option>
-
-<option value="USDT">
-USDT
-</option>
-
-</select>
-</label>
-
-<label>
-Сумма
-
-<input
-name="amount"
-type="number"
-required
-/>
-</label>
-
-<label>
-Валюта
-
-<select name="currency">
-
-<option value="Stars">
-Stars
-</option>
-
-<option value="TON">
-TON
-</option>
-
-<option value="USDT">
-USDT
-</option>
-
-<option value="RUB">
-RUB
-</option>
-
-</select>
-</label>
-
-<label>
-Покупатель
-
-<input
-name="buyer"
-placeholder="@username"
-required
-/>
-</label>
-
-<button
-class="primary-action"
-type="submit"
->
-Создать
-</button>
-
-</form>
-
-</section>
-
-<section class="view" id="dealView">
-
-<header class="screen-header">
-
-<div>
-<p class="eyebrow">Kasper</p>
-<h1>Сделка</h1>
-</div>
-
-<button
-class="icon-button"
-id="backDeals"
-type="button"
->
-←
-</button>
-
-</header>
-
-<div id="dealPage"></div>
-
-</section>
-
-<section class="view" id="profileView">
-
-<header class="screen-header">
-
-<div>
-<p class="eyebrow">Kasper</p>
-<h1>Профиль</h1>
-</div>
-
-</header>
-
-<div class="profile-card">
-
-<div
-class="avatar"
-id="avatar"
->
-K
-</div>
-
-<div>
-<h2 id="profileName">
-Kasper user
-</h2>
-
-<p id="profileMeta">
-Telegram Mini App
-</p>
-</div>
-
-</div>
-
-</section>
-
-</main>
-
-<nav class="bottom-nav">
-
-<button
-class="nav-item active"
-data-view="dealsView"
->
-Сделки
-</button>
-
-<button
-class="nav-item"
-data-view="walletView"
->
-Баланс
-</button>
-
-<button
-class="nav-item"
-data-view="createView"
->
-Создать
-</button>
-
-<button
-class="nav-item"
-data-view="profileView"
->
-Профиль
-</button>
-
-</nav>
-
-<script src="./app.js"></script>
-
+  <main class="app-shell">
+    <section class="view active" id="dealsView">
+      <header class="screen-header">
+        <h1>Мои сделки</h1>
+      </header>
+
+      <button class="primary-action" id="openCreate" type="button">
+        <span aria-hidden="true">+</span>
+        Создать сделку
+      </button>
+
+      <div class="deal-tabs" role="tablist" aria-label="Фильтр сделок">
+        <button class="deal-tab active" data-filter="active" type="button">Активные</button>
+        <button class="deal-tab" data-filter="history" type="button">История сделок</button>
+      </div>
+
+      <div class="deal-list" id="dealList"></div>
+    </section>
+
+    <section class="view" id="walletView">
+      <header class="screen-header split">
+        <h1>Кошельки</h1>
+        <button class="soft-button" id="openTransactions" type="button">История</button>
+      </header>
+
+      <div class="balance-grid" id="balanceGrid"></div>
+
+      <section class="wallet-actions" aria-label="Действия с балансом">
+        <button type="button">Пополнить</button>
+        <button type="button">Вывести</button>
+      </section>
+    </section>
+
+    <section class="view" id="leadersView">
+      <article class="user-strip">
+        <div class="mini-avatar">K</div>
+        <div>
+          <strong id="leaderUserName">i don't sleep</strong>
+          <span id="leaderUserMeta">Kasper user</span>
+        </div>
+      </article>
+
+      <header class="leader-header">
+        <h1>Топ участников</h1>
+        <p>По объёму завершённых сделок</p>
+      </header>
+
+      <section class="podium-card" aria-label="Топ 3 участника">
+        <div class="podium-row">
+          <article class="podium-place second">
+            <div class="rank-badge silver">2</div>
+            <div class="leader-name">rally</div>
+            <div class="leader-avatar"></div>
+            <button class="gift-button muted" type="button" aria-label="Подарок">🎁</button>
+            <div class="podium-box small">
+              <div class="box-top"></div>
+              <div class="box-front"></div>
+              <div class="box-side"></div>
+            </div>
+            <strong>$40.0k</strong>
+            <span>102 сделок</span>
+          </article>
+
+          <article class="podium-place first">
+            <div class="rank-badge gold">1</div>
+            <div class="leader-name">rally</div>
+            <div class="leader-avatar main"></div>
+            <button class="gift-button gold-button" type="button" aria-label="Подарок">🎁</button>
+            <div class="podium-box big">
+              <div class="box-top"></div>
+              <div class="box-front"></div>
+              <div class="box-side"></div>
+            </div>
+            <strong>$50.0k</strong>
+            <span>120 сделок</span>
+          </article>
+
+          <article class="podium-place third">
+            <div class="rank-badge bronze">3</div>
+            <div class="leader-name">rally</div>
+            <div class="leader-avatar bronze-ring"></div>
+            <button class="gift-button bronze-button" type="button" aria-label="Подарок">🎁</button>
+            <div class="podium-box small">
+              <div class="box-top"></div>
+              <div class="box-front"></div>
+              <div class="box-side"></div>
+            </div>
+            <strong>$32.0k</strong>
+            <span>86 сделок</span>
+          </article>
+        </div>
+      </section>
+
+      <div class="leader-list" id="leaderList"></div>
+    </section>
+
+    <section class="view" id="transactionsView">
+      <header class="screen-header split">
+        <button class="back-button" data-view="walletView" type="button">‹ Назад</button>
+      </header>
+      <h1 class="center-title">История транзакций</h1>
+      <div class="transaction-list" id="transactionList"></div>
+    </section>
+
+    <section class="view" id="createView">
+      <header class="screen-header split">
+        <button class="back-button" data-view="dealsView" type="button">‹ Назад</button>
+      </header>
+      <h1>Новая сделка</h1>
+
+      <form class="deal-form" id="dealForm">
+        <label>
+          Тип сделки
+          <input name="title" value="подарок" autocomplete="off">
+        </label>
+
+        <div class="form-row">
+          <label>
+            Сумма
+            <input name="amount" inputmode="decimal" value="67">
+          </label>
+
+          <label>
+            Валюта
+            <select name="currency">
+              <option>STARS</option>
+              <option>TON</option>
+              <option>USDT</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Покупатель
+          <input name="buyer" value="@buyer" autocomplete="off">
+        </label>
+
+        <button class="primary-action compact" type="submit">Создать</button>
+      </form>
+    </section>
+
+    <section class="view" id="profileView">
+      <header class="screen-header">
+        <h1>Профиль</h1>
+      </header>
+
+      <article class="profile-card">
+        <div class="profile-avatar" id="profileAvatar">K</div>
+        <div>
+          <h2 id="profileName">Kasper user</h2>
+          <p id="profileMeta">Telegram Mini App</p>
+        </div>
+      </article>
+
+      <section class="profile-stats">
+        <article><strong>120</strong><span>сделок</span></article>
+        <article><strong>$50.0k</strong><span>оборот</span></article>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Основная навигация">
+    <button class="nav-item active" data-view="dealsView" type="button">
+      <span aria-hidden="true">▦</span>
+      Сделки
+    </button>
+    <button class="nav-item" data-view="walletView" type="button">
+      <span aria-hidden="true">▣</span>
+      Кошельки
+    </button>
+    <button class="nav-item" data-view="leadersView" type="button">
+      <span aria-hidden="true">♛</span>
+      Лидеры
+    </button>
+    <button class="nav-item" data-view="profileView" type="button">
+      <span aria-hidden="true">♙</span>
+      Профиль
+    </button>
+  </nav>
+
+  <script src="./app.js"></script>
 </body>
 </html>
